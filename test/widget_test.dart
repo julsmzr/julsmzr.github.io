@@ -5,26 +5,30 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 
 import 'package:julsmzr_github_io/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Landing shows navigation buttons', (tester) async {
     await tester.pumpWidget(const MyApp());
+    expect(find.text('julsmzr'), findsOneWidget);
+    expect(find.text('Projects'), findsOneWidget);
+    expect(find.text('Games'), findsOneWidget);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  // Navigate to Projects
+  await tester.tap(find.text('Projects'));
+  await tester.pump(const Duration(milliseconds: 300));
+  expect(find.text('Projects'), findsWidgets);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  // Pop manually
+  Navigator.of(tester.element(find.text('Projects').first)).pop();
+  await tester.pump(const Duration(milliseconds: 300));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  // Navigate to Games
+  await tester.tap(find.text('Games'));
+  await tester.pump(const Duration(milliseconds: 300));
+  expect(find.text('Games'), findsWidgets);
   });
 }
